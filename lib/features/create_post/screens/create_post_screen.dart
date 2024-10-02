@@ -75,6 +75,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               createdAt: DateTime.now(),
               likedBy: [],
               savedBy: [],
+              comments: [],
             ),
             context,
           );

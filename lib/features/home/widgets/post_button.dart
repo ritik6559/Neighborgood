@@ -14,12 +14,54 @@ class PostButton extends StatefulWidget {
 }
 
 class _PostButtonState extends State<PostButton> {
+
+
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, 
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          height: 300, 
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Comments Section',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.post.comments.length,
+                  itemBuilder: (context, index) {
+                    return Text(widget.post.comments[index].text);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final isLiked =
         widget.post.likedBy.contains(context.read<AuthRepository>().user.uid);
     final isSaved =
         widget.post.savedBy.contains(context.read<AuthRepository>().user.uid);
+
+    
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -46,9 +88,14 @@ class _PostButtonState extends State<PostButton> {
                         ),
                 ),
                 const SizedBox(width: 10),
-                SvgPicture.asset(
-                  'assets/icons/comments.svg',
-                  height: 22,
+                GestureDetector(
+                  onTap: () {
+                    _showBottomSheet(context);
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/comments.svg',
+                    height: 22,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 SvgPicture.asset(

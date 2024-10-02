@@ -24,22 +24,44 @@ class PostRepository {
   }
 
   Future<void> addPost(Post post, BuildContext context) async {
-    try {
-      await _firestore.collection('posts').doc(post.id).set(post.toMap());
-    } on FirebaseException catch (e) {
-      showSnackBar(
-        context,
-        e.message!,
-        'Oh Snap!',
-      );
-    } catch (e) {
-      showSnackBar(
-        context,
-        e.toString(),
-        'Oh Snap!',
-      );
+  try {
+    await _firestore.collection('posts').doc(post.id).set(post.toMap());
+
+    DocumentSnapshot userDoc = await _firestore.collection('users').doc(post.uid).get();
+
+    if (userDoc.exists) {
+      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+      List<Post> userPosts = [];
+      if (userData != null && userData['posts'] is List) {
+        userPosts = (userData['posts'] as List)
+            .map((postData) => Post.fromMap(postData as Map<String, dynamic>))
+            .toList();
+      }
+
+      userPosts.add(post);
+
+      await _firestore.collection('users').doc(post.uid).update({
+        'posts': userPosts.map((p) => p.toMap()).toList(),
+      });
+
+      
+    } else {
+      throw Exception('User not found');
     }
+  } on FirebaseException catch (e) {
+    showSnackBar(
+      context,
+      e.message!,
+      'Oh Snap!',
+    );
+  } catch (e) {
+    showSnackBar(
+      context,
+      e.toString(),
+      'Oh Snap!',
+    );
   }
+}
 
   Future<void> addComment(Comment comment, BuildContext context) async {
     try {
@@ -87,7 +109,7 @@ class PostRepository {
     try {
       return _firestore
           .collection('posts')
-          .where('uid', isEqualTo: userId) // Query posts by user ID (author ID)
+          .where('uid', isEqualTo: userId)
           .snapshots()
           .map(
             (snapshot) => snapshot.docs
@@ -108,12 +130,10 @@ class PostRepository {
     DocumentReference postRef = _firestore.collection('posts').doc(post.id);
 
     if (post.likedBy.contains(userId)) {
-      // If the user has already liked the post, unlike it
       await postRef.update({
         'likedBy': FieldValue.arrayRemove([userId]),
       });
     } else {
-      // If the user has not liked the post, like it
       await postRef.update({
         'likedBy': FieldValue.arrayUnion([userId]),
       });

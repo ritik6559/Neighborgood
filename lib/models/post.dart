@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
+import 'package:neighborgood/models/comments.dart';
+
 class Post {
   final String id;
   final String uid;
@@ -9,6 +15,7 @@ class Post {
   final DateTime createdAt;
   final List<String> likedBy;
   final List<String> savedBy;
+  final List<Comment> comments;
 
   Post({
     required this.id,
@@ -21,6 +28,7 @@ class Post {
     required this.createdAt,
     required this.likedBy,
     required this.savedBy,
+    required this.comments,
   });
 
   Post copyWith({
@@ -34,6 +42,7 @@ class Post {
     DateTime? createdAt,
     List<String>? likedBy,
     List<String>? savedBy,
+    List<Comment>? comments,
   }) {
     return Post(
       id: id ?? this.id,
@@ -46,6 +55,7 @@ class Post {
       createdAt: createdAt ?? this.createdAt,
       likedBy: likedBy ?? this.likedBy,
       savedBy: savedBy ?? this.savedBy,
+      comments: comments ?? this.comments,
     );
   }
 
@@ -61,6 +71,7 @@ class Post {
       'createdAt': createdAt.millisecondsSinceEpoch,
       'likedBy': likedBy,
       'savedBy': savedBy,
+      'comments': comments.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -76,6 +87,49 @@ class Post {
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       likedBy: List<String>.from(map['likedBy']),
       savedBy: List<String>.from(map['savedBy']),
+      comments: List<Comment>.from(map['comments']?.map((x) => Comment.fromMap(x))),
     );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Post.fromJson(String source) => Post.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Post(id: $id, uid: $uid, authorName: $authorName, authorImage: $authorImage, authorDescription: $authorDescription, description: $description, image: $image, createdAt: $createdAt, likedBy: $likedBy, savedBy: $savedBy, comments: $comments)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is Post &&
+      other.id == id &&
+      other.uid == uid &&
+      other.authorName == authorName &&
+      other.authorImage == authorImage &&
+      other.authorDescription == authorDescription &&
+      other.description == description &&
+      other.image == image &&
+      other.createdAt == createdAt &&
+      listEquals(other.likedBy, likedBy) &&
+      listEquals(other.savedBy, savedBy) &&
+      listEquals(other.comments, comments);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      uid.hashCode ^
+      authorName.hashCode ^
+      authorImage.hashCode ^
+      authorDescription.hashCode ^
+      description.hashCode ^
+      image.hashCode ^
+      createdAt.hashCode ^
+      likedBy.hashCode ^
+      savedBy.hashCode ^
+      comments.hashCode;
   }
 }
