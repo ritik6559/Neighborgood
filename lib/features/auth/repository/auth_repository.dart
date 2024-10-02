@@ -113,7 +113,6 @@ class AuthRepository {
             await _users.doc(userCredential.user!.uid).get();
 
         if (!userDoc.exists) {
-          // If the user doesn't exist, create a new user document
           UserModel newUser = UserModel(
             uid: userCredential.user!.uid,
             name: userCredential.user!.displayName ?? "No name",
@@ -128,7 +127,6 @@ class AuthRepository {
           await _users.doc(newUser.uid).set(newUser.toMap());
           print('New user created: ${newUser.name}');
         } else {
-          // If the user exists, retrieve their data
           Map<String, dynamic> userData =
               userDoc.data() as Map<String, dynamic>;
           UserModel existingUser = UserModel.fromMap(userData);
@@ -148,6 +146,7 @@ class AuthRepository {
 
   Future<UserModel?> getUserDetails() async {
     try {
+      // ignore: unnecessary_null_comparison
       if (user == null) {
         return null;
       }
