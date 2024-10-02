@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:neighborgood/features/home/widgets/custom_text.dart';
 import 'package:neighborgood/features/home/widgets/post_button.dart';
 import 'package:neighborgood/features/home/widgets/post_text_field.dart';
-import 'package:neighborgood/modals/post.dart';
+import 'package:neighborgood/models/post.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -27,6 +27,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.post.image);
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.symmetric(
@@ -44,15 +45,15 @@ class _PostCardState extends State<PostCard> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 25,
                     backgroundImage: AssetImage(
-                      widget.post.authorImage,
+                      'assets/icons/navigation/profile.jpg',
                     ),
                   ),
                   const SizedBox(width: 10),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -66,8 +67,7 @@ class _PostCardState extends State<PostCard> {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text:
-                                  '${widget.post.authorDescription.substring(0, 22)}...',
+                              text: '${widget.post.authorDescription}...',
                               style: const TextStyle(
                                 fontSize: 13,
                               ),
@@ -103,12 +103,12 @@ class _PostCardState extends State<PostCard> {
             text: widget.post.description,
             hashtagColor: const Color(0xFF2D68FE),
             onSeeMore: () {},
-            maxLength: 60,
+            maxLength: 22,
           ),
           const SizedBox(height: 15),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
+            child: Image.network(
               widget.post.image,
               height: 220,
               width: double.infinity,

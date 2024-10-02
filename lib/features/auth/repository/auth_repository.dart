@@ -6,13 +6,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:neighborgood/common/utils/show_snackbar.dart';
 import 'package:neighborgood/features/auth/screens/login_screen.dart';
 import 'package:neighborgood/features/home/screens/entry_point.dart';
-import 'package:neighborgood/modals/user.dart';
+import 'package:neighborgood/models/user.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth;
-  AuthRepository(
-    this._auth,
-  );
+
+  AuthRepository({
+    required FirebaseAuth auth,
+  }) : _auth = auth;
 
   User get user => _auth.currentUser!;
 
@@ -38,7 +39,11 @@ class AuthRepository {
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!);
+      showSnackBar(
+        context,
+        e.message!,
+        'Oh Snap!',
+      );
     }
   }
 
@@ -59,6 +64,10 @@ class AuthRepository {
         uid: userCredential.user!.uid,
         name: name,
         email: email,
+        followers: 0,
+        posts: [],
+        following: 0,
+        profilePic: 'assets/icons/navigation/profile.jpg',
       );
       _users.doc(userCredential.user!.uid).set(userModel.toMap());
       if (userCredential.user != null) {
@@ -76,7 +85,11 @@ class AuthRepository {
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
       }
-      showSnackBar(context, e.message!);
+      showSnackBar(
+        context,
+        e.message!,
+        'Oh Snap!',
+      );
     }
   }
 
@@ -105,6 +118,11 @@ class AuthRepository {
             uid: userCredential.user!.uid,
             name: userCredential.user!.displayName ?? "No name",
             email: userCredential.user!.email!,
+            followers: 0,
+            posts: [],
+            following: 0,
+            profilePic: userCredential.user!.photoURL ??
+                'assets/icons/navigation/profile.jpg',
           );
 
           await _users.doc(newUser.uid).set(newUser.toMap());
@@ -128,6 +146,29 @@ class AuthRepository {
         (event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
+  Future<UserModel?> getUserDetails() async {
+    try {
+      if (user == null) {
+        return null;
+      }
+      print(user.uid);
+
+      DocumentSnapshot userDoc = await _users.doc(user.uid).get();
+
+      if (userDoc.exists) {
+        return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+      } else {
+        return null;
+      }
+    } on FirebaseException catch (e) {
+      print('Error fetching user details: ${e.message}');
+      return null;
+    } catch (e) {
+      print('Unexpected error fetching user details: $e');
+      return null;
+    }
+  }
+
   Future<void> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
@@ -138,10 +179,7 @@ class AuthRepository {
         ),
       );
     } on FirebaseAuthException catch (e) {
-      showSnackBar(
-        context,
-        e.message!,
-      );
+      showSnackBar(context, e.message!, 'Oh Snap!');
     }
   }
 }

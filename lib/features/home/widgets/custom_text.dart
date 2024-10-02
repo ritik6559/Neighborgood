@@ -16,6 +16,7 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final truncated = text.length > maxLength;
     final displayText = truncated ? text.substring(0, maxLength) : text;
     final displayWords = displayText.split(' ');

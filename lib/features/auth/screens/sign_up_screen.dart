@@ -38,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showSnackBar(
         context,
         "Password doesn't match",
+        'Error',
       );
     }
   }
