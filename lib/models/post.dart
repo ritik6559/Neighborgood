@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Post {
   final String id;
   final String uid;
@@ -9,6 +7,8 @@ class Post {
   final String description;
   final String image;
   final DateTime createdAt;
+  final List<String> likedBy;
+  final List<String> savedBy;
 
   Post({
     required this.id,
@@ -19,6 +19,8 @@ class Post {
     required this.description,
     required this.image,
     required this.createdAt,
+    required this.likedBy,
+    required this.savedBy,
   });
 
   Post copyWith({
@@ -30,6 +32,8 @@ class Post {
     String? description,
     String? image,
     DateTime? createdAt,
+    List<String>? likedBy,
+    List<String>? savedBy,
   }) {
     return Post(
       id: id ?? this.id,
@@ -40,6 +44,8 @@ class Post {
       description: description ?? this.description,
       image: image ?? this.image,
       createdAt: createdAt ?? this.createdAt,
+      likedBy: likedBy ?? this.likedBy,
+      savedBy: savedBy ?? this.savedBy,
     );
   }
 
@@ -53,6 +59,8 @@ class Post {
       'description': description,
       'image': image,
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'likedBy': likedBy,
+      'savedBy': savedBy,
     };
   }
 
@@ -66,42 +74,8 @@ class Post {
       description: map['description'] ?? '',
       image: map['image'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      likedBy: List<String>.from(map['likedBy']),
+      savedBy: List<String>.from(map['savedBy']),
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Post.fromJson(String source) => Post.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'Post(id: $id, uid: $uid, authorName: $authorName, authorImage: $authorImage, authorDescription: $authorDescription, description: $description, image: $image, createdAt: $createdAt)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-  
-    return other is Post &&
-      other.id == id &&
-      other.uid == uid &&
-      other.authorName == authorName &&
-      other.authorImage == authorImage &&
-      other.authorDescription == authorDescription &&
-      other.description == description &&
-      other.image == image &&
-      other.createdAt == createdAt;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-      uid.hashCode ^
-      authorName.hashCode ^
-      authorImage.hashCode ^
-      authorDescription.hashCode ^
-      description.hashCode ^
-      image.hashCode ^
-      createdAt.hashCode;
   }
 }

@@ -5,7 +5,7 @@ class Comment {
   final String postId;
   final String username;
   final String profilePic;
-  
+
   Comment({
     required this.id,
     required this.text,
@@ -55,34 +55,5 @@ class Comment {
       username: map['username'] ?? '',
       profilePic: map['profilePic'] ?? '',
     );
-  }
-
-
-  @override
-  String toString() {
-    return 'Comment(id: $id, text: $text, createdAt: $createdAt, postId: $postId, username: $username, profilePic: $profilePic)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-  
-    return other is Comment &&
-      other.id == id &&
-      other.text == text &&
-      other.createdAt == createdAt &&
-      other.postId == postId &&
-      other.username == username &&
-      other.profilePic == profilePic;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-      text.hashCode ^
-      createdAt.hashCode ^
-      postId.hashCode ^
-      username.hashCode ^
-      profilePic.hashCode;
   }
 }

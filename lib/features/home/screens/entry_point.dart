@@ -44,13 +44,17 @@ class _EntryPointState extends State<EntryPoint> {
                   currentIndex = 0;
                 });
               },
-              child: SvgPicture.asset(
-                'assets/icons/navigation/home.svg',
-                height: 30,
-                width: 30,
-                color:
-                    currentIndex == 0 ? const Color(0xFFFF6D00) : Colors.grey,
-              ),
+              child: currentIndex == 0
+                  ? SvgPicture.asset(
+                      'assets/icons/navigation/home_selected.svg',
+                      height: 30,
+                      width: 30,
+                    )
+                  : SvgPicture.asset(
+                      'assets/icons/navigation/home.svg',
+                      height: 30,
+                      width: 30,
+                    ),
             ),
             GestureDetector(
               onTap: () {
@@ -58,13 +62,20 @@ class _EntryPointState extends State<EntryPoint> {
                   currentIndex = 1;
                 });
               },
-              child: SvgPicture.asset(
-                'assets/icons/navigation/search.svg',
-                height: 30,
-                width: 30,
-                color:
-                    currentIndex == 1 ? const Color(0xFFFF6D00) : Colors.grey,
-              ),
+              child: currentIndex == 1
+                  ? SvgPicture.asset(
+                      'assets/icons/navigation/search_selected.svg',
+                      height: 30,
+                      width: 30,
+                      color: currentIndex == 1
+                          ? const Color(0xFFFF6D00)
+                          : Colors.grey,
+                    )
+                  : SvgPicture.asset(
+                      'assets/icons/navigation/search.svg',
+                      height: 30,
+                      width: 30,
+                    ),
             ),
             GestureDetector(
               onTap: () {
@@ -72,13 +83,20 @@ class _EntryPointState extends State<EntryPoint> {
                   currentIndex = 2;
                 });
               },
-              child: SvgPicture.asset(
-                'assets/icons/navigation/add_post.svg',
-                height: 30,
-                width: 30,
-                color:
-                    currentIndex == 2 ? const Color(0xFFFF6D00) : Colors.grey,
-              ),
+              child: currentIndex == 2
+                  ? SvgPicture.asset(
+                      'assets/icons/navigation/add_post_selected.svg',
+                      height: 30,
+                      width: 30,
+                      color: currentIndex == 2
+                          ? const Color(0xFFFF6D00)
+                          : Colors.grey,
+                    )
+                  : SvgPicture.asset(
+                      'assets/icons/navigation/add_post.svg',
+                      height: 30,
+                      width: 30,
+                    ),
             ),
             GestureDetector(
               onTap: () {
@@ -86,13 +104,20 @@ class _EntryPointState extends State<EntryPoint> {
                   currentIndex = 3;
                 });
               },
-              child: SvgPicture.asset(
-                'assets/icons/navigation/posts.svg',
-                height: 30,
-                width: 30,
-                color:
-                    currentIndex == 3 ? const Color(0xFFFF6D00) : Colors.grey,
-              ),
+              child: currentIndex == 3
+                  ? SvgPicture.asset(
+                      'assets/icons/navigation/posts_selected.svg',
+                      height: 30,
+                      width: 30,
+                      color: currentIndex == 3
+                          ? const Color(0xFFFF6D00)
+                          : Colors.grey,
+                    )
+                  : SvgPicture.asset(
+                      'assets/icons/navigation/posts.svg',
+                      height: 30,
+                      width: 30,
+                    ),
             ),
             GestureDetector(
               onTap: () {
@@ -103,11 +128,14 @@ class _EntryPointState extends State<EntryPoint> {
               child: Container(
                 height: 30,
                 width: 30,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.grey,
-                  image: DecorationImage(
-                    image: AssetImage('assets/icons/navigation/profile.jpg'),
+                  color:
+                      currentIndex == 4 ? const Color(0xFFFF6D00) : Colors.grey,
+                  image: const DecorationImage(
+                    image: AssetImage(
+                      'assets/icons/navigation/profile.jpg',
+                    ),
                   ),
                 ),
               ),

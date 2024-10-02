@@ -82,4 +82,74 @@ class PostRepository {
               .toList(),
         );
   }
+
+  Stream<List<Post>> getUserPostsStream(String userId, BuildContext context) {
+    try {
+      return _firestore
+          .collection('posts')
+          .where('uid', isEqualTo: userId) // Query posts by user ID (author ID)
+          .snapshots()
+          .map(
+            (snapshot) => snapshot.docs
+                .map(
+                  (doc) => Post.fromMap(
+                    doc.data() as Map<String, dynamic>,
+                  ),
+                )
+                .toList(),
+          );
+    } catch (e) {
+      showSnackBar(context, e.toString(), 'Oh Snap!');
+      return Stream.value([]);
+    }
+  }
+
+  Future<void> likePost(Post post, String userId) async {
+    DocumentReference postRef = _firestore.collection('posts').doc(post.id);
+
+    if (post.likedBy.contains(userId)) {
+      // If the user has already liked the post, unlike it
+      await postRef.update({
+        'likedBy': FieldValue.arrayRemove([userId]),
+      });
+    } else {
+      // If the user has not liked the post, like it
+      await postRef.update({
+        'likedBy': FieldValue.arrayUnion([userId]),
+      });
+    }
+  }
+
+  Future<void> savePost(Post post, String userId) async {
+    DocumentReference postRef = _firestore.collection('posts').doc(post.id);
+
+    if (post.savedBy.contains(userId)) {
+      await postRef.update({
+        'savedBy': FieldValue.arrayRemove([userId]),
+      });
+    } else {
+      await postRef.update({
+        'savedBy': FieldValue.arrayUnion([userId]),
+      });
+    }
+  }
+
+  Stream<List<Post>> getSavedPostsStream(String userId, BuildContext context) {
+    try {
+      return _firestore
+          .collection('posts')
+          .where('savedBy', arrayContains: userId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map(
+                (doc) => Post.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList());
+    } catch (e) {
+      showSnackBar(context, e.toString(), 'Oh Snap!');
+      return Stream.value([]);
+    }
+  }
 }

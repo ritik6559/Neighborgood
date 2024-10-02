@@ -26,7 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = GlobalKey<FormState>();
 
   void register() async {
-    print('hi');
     if (_passwordController.text == _confirmPasswordController.text) {
       context.read<AuthRepository>().registerUser(
             email: _emailController.text,

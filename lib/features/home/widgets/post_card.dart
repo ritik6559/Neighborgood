@@ -27,7 +27,6 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.post.image);
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.symmetric(
@@ -116,7 +115,7 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
           const SizedBox(height: 15),
-          const PostButton(),
+          PostButton(post: widget.post),
           const SizedBox(height: 10),
           PostTextField(
             controller: _commentController,

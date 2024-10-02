@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:neighborgood/common/provider/storage_reposiotry.dart';
 import 'package:neighborgood/features/auth/repository/auth_gate.dart';
 import 'package:neighborgood/features/auth/repository/auth_repository.dart';
-import 'package:neighborgood/features/create_post/screens/create_post_screen.dart';
 import 'package:neighborgood/features/posts/repository/post_repository.dart';
 import 'package:neighborgood/firebase_options.dart';
 import 'package:provider/provider.dart';

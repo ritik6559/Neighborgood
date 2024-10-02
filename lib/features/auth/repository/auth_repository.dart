@@ -64,10 +64,11 @@ class AuthRepository {
         uid: userCredential.user!.uid,
         name: name,
         email: email,
-        followers: 0,
+        followers: [],
         posts: [],
-        following: 0,
+        following: [],
         profilePic: 'assets/icons/navigation/profile.jpg',
+        description: '',
       );
       _users.doc(userCredential.user!.uid).set(userModel.toMap());
       if (userCredential.user != null) {
@@ -117,11 +118,12 @@ class AuthRepository {
             uid: userCredential.user!.uid,
             name: userCredential.user!.displayName ?? "No name",
             email: userCredential.user!.email!,
-            followers: 0,
+            followers: [],
             posts: [],
-            following: 0,
+            following: [],
             profilePic: userCredential.user!.photoURL ??
                 'assets/icons/navigation/profile.jpg',
+            description: '',
           );
 
           await _users.doc(newUser.uid).set(newUser.toMap());

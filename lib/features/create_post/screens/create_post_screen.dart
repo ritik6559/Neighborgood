@@ -63,7 +63,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         file: bannerFile,
         context: context,
       );
-      print("bannerUrl" + bannerUrl!);
       context.read<PostRepository>().addPost(
             Post(
               id: postId,
@@ -72,8 +71,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               authorImage: user.profilePic,
               authorDescription: '',
               description: _descriptionController.text.trim(),
-              image: bannerUrl,
+              image: bannerUrl!,
               createdAt: DateTime.now(),
+              likedBy: [],
+              savedBy: [],
             ),
             context,
           );
@@ -129,7 +130,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.all(15),
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(

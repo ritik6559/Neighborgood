@@ -25,7 +25,6 @@ class StorageRepository {
       uploadTask = ref.putFile(file!);
 
       final snapshot = await uploadTask;
-      print(snapshot.ref.getDownloadURL());
 
       return await snapshot.ref.getDownloadURL();
     } catch (e) {

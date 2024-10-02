@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:neighborgood/models/user.dart';
 
 class SocialCount extends StatelessWidget {
-  const SocialCount({super.key});
+  final UserModel user;
+  const SocialCount({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Column(
           children: [
             Text(
-              '15',
-              style: TextStyle(
+              user.posts.length.toString(),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Posts',
               style: TextStyle(
                 fontSize: 14,
@@ -28,13 +30,13 @@ class SocialCount extends StatelessWidget {
         Column(
           children: [
             Text(
-              '150',
-              style: TextStyle(
+              user.followers.length.toString(),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Followers',
               style: TextStyle(
                 fontSize: 14,
@@ -45,8 +47,8 @@ class SocialCount extends StatelessWidget {
         Column(
           children: [
             Text(
-              '98',
-              style: TextStyle(
+              user.following.length.toString(),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
