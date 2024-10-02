@@ -53,7 +53,7 @@ class SocialCount extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Following',
               style: TextStyle(
                 fontSize: 14,
