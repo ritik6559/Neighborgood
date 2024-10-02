@@ -52,11 +52,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       isVisible = !isVisible;
                     });
                   },
-                  child: SvgPicture.asset(
-                    widget.prefixPath,
-                    height: 14,
-                    width: 14,
-                  ),
+                  child: isVisible
+                      ? SvgPicture.asset(
+                          'assets/icons/eye_closed.svg',
+                          height: 14,
+                          width: 14,
+                        )
+                      : SvgPicture.asset(
+                          'assets/icons/eye_open.svg',
+                          height: 14,
+                          width: 14,
+                        ),
                 ),
               )
             : null,

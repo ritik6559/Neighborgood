@@ -26,18 +26,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final formKey = GlobalKey<FormState>();
 
   void register() async {
-    if (_passwordController.text == _confirmPasswordController.text) {
+    if (_passwordController.text == _confirmPasswordController.text &&
+        _isChecked == true) {
       context.read<AuthRepository>().registerUser(
             email: _emailController.text,
             password: _passwordController.text,
             context: context,
             name: _fullNameController.text,
           );
+    } else if (_isChecked == false) {
+      showSnackBar(
+        context,
+        "Please accept terms & conditions",
+        'Oh Snap!',
+      );
     } else {
       showSnackBar(
         context,
         "Password doesn't match",
-        'Error',
+        'Oh Snap!',
       );
     }
   }
