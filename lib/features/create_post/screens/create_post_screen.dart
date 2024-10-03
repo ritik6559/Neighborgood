@@ -69,7 +69,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               uid: user.uid,
               authorName: user.name,
               authorImage: user.profilePic,
-              authorDescription: '',
+              title: _titleController.text.trim(),
               description: _descriptionController.text.trim(),
               image: bannerUrl!,
               createdAt: DateTime.now(),

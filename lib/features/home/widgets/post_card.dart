@@ -66,7 +66,7 @@ class _PostCardState extends State<PostCard> {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: '${widget.post.authorDescription}...',
+                              text: '${widget.post.title}...',
                               style: const TextStyle(
                                 fontSize: 13,
                               ),

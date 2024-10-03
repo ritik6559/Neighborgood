@@ -14,17 +14,14 @@ class PostButton extends StatefulWidget {
 }
 
 class _PostButtonState extends State<PostButton> {
-
-
-
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, 
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(16.0),
-          height: 300, 
+          height: 300,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -51,17 +48,12 @@ class _PostButtonState extends State<PostButton> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final isLiked =
         widget.post.likedBy.contains(context.read<AuthRepository>().user.uid);
     final isSaved =
         widget.post.savedBy.contains(context.read<AuthRepository>().user.uid);
-
-    
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -87,7 +79,7 @@ class _PostButtonState extends State<PostButton> {
                           height: 22,
                         ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 GestureDetector(
                   onTap: () {
                     _showBottomSheet(context);
@@ -97,7 +89,7 @@ class _PostButtonState extends State<PostButton> {
                     height: 22,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 SvgPicture.asset(
                   'assets/icons/share.svg',
                   height: 22,
@@ -106,19 +98,22 @@ class _PostButtonState extends State<PostButton> {
             )
           ],
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 15),
         GestureDetector(
           onTap: () {
-            context.read<PostRepository>().savePost(widget.post, context.read<AuthRepository>().user.uid);
+            context
+                .read<PostRepository>()
+                .savePost(widget.post, context.read<AuthRepository>().user.uid);
           },
           child: isSaved
               ? SvgPicture.asset(
                   'assets/icons/saved.svg',
                   height: 22,
-          ) : SvgPicture.asset(
-            'assets/icons/save.svg',
-            height: 22,
-          ),
+                )
+              : SvgPicture.asset(
+                  'assets/icons/save.svg',
+                  height: 22,
+                ),
         ),
       ],
     );

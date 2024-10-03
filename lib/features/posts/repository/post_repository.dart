@@ -16,7 +16,7 @@ class PostRepository {
           (snapshot) => snapshot.docs
               .map(
                 (doc) => Post.fromMap(
-                  doc.data() as Map<String, dynamic>,
+                  doc.data(),
                 ),
               )
               .toList(),
@@ -24,44 +24,44 @@ class PostRepository {
   }
 
   Future<void> addPost(Post post, BuildContext context) async {
-  try {
-    await _firestore.collection('posts').doc(post.id).set(post.toMap());
+    try {
+      await _firestore.collection('posts').doc(post.id).set(post.toMap());
 
-    DocumentSnapshot userDoc = await _firestore.collection('users').doc(post.uid).get();
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(post.uid).get();
 
-    if (userDoc.exists) {
-      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
-      List<Post> userPosts = [];
-      if (userData != null && userData['posts'] is List) {
-        userPosts = (userData['posts'] as List)
-            .map((postData) => Post.fromMap(postData as Map<String, dynamic>))
-            .toList();
+      if (userDoc.exists) {
+        Map<String, dynamic>? userData =
+            userDoc.data() as Map<String, dynamic>?;
+        List<Post> userPosts = [];
+        if (userData != null && userData['posts'] is List) {
+          userPosts = (userData['posts'] as List)
+              .map((postData) => Post.fromMap(postData as Map<String, dynamic>))
+              .toList();
+        }
+
+        userPosts.add(post);
+
+        await _firestore.collection('users').doc(post.uid).update({
+          'posts': userPosts.map((p) => p.toMap()).toList(),
+        });
+      } else {
+        throw Exception('User not found');
       }
-
-      userPosts.add(post);
-
-      await _firestore.collection('users').doc(post.uid).update({
-        'posts': userPosts.map((p) => p.toMap()).toList(),
-      });
-
-      
-    } else {
-      throw Exception('User not found');
+    } on FirebaseException catch (e) {
+      showSnackBar(
+        context,
+        e.message!,
+        'Oh Snap!',
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+        'Oh Snap!',
+      );
     }
-  } on FirebaseException catch (e) {
-    showSnackBar(
-      context,
-      e.message!,
-      'Oh Snap!',
-    );
-  } catch (e) {
-    showSnackBar(
-      context,
-      e.toString(),
-      'Oh Snap!',
-    );
   }
-}
 
   Future<void> addComment(Comment comment, BuildContext context) async {
     try {
@@ -88,21 +88,27 @@ class PostRepository {
     }
   }
 
-  Stream<List<Comment>> getCommentsStream(String postId) {
-    return _firestore
-        .collection('comments')
-        .where('postId', isEqualTo: postId)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map(
-                (doc) => Comment.fromMap(
-                  doc.data() as Map<String, dynamic>,
-                ),
-              )
-              .toList(),
-        );
+  Stream<List<Comment>> getCommentsStream(String postId, BuildContext context) {
+    try {
+      return _firestore
+          .collection('comments')
+          .where('postId', isEqualTo: postId)
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .map(
+            (snapshot) => snapshot.docs
+                .map(
+                  (doc) => Comment.fromMap(
+                    doc.data(),
+                  ),
+                )
+                .toList(),
+          );
+    } catch (e) {
+      print(e);
+      showSnackBar(context, e.toString(), 'Oh Snap!');
+      return Stream.value([]);
+    }
   }
 
   Stream<List<Post>> getUserPostsStream(String userId, BuildContext context) {
@@ -115,7 +121,7 @@ class PostRepository {
             (snapshot) => snapshot.docs
                 .map(
                   (doc) => Post.fromMap(
-                    doc.data() as Map<String, dynamic>,
+                    doc.data(),
                   ),
                 )
                 .toList(),
@@ -163,7 +169,7 @@ class PostRepository {
           .map((snapshot) => snapshot.docs
               .map(
                 (doc) => Post.fromMap(
-                  doc.data() as Map<String, dynamic>,
+                  doc.data(),
                 ),
               )
               .toList());
