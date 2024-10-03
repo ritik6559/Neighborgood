@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:neighborgood/features/home/widgets/custom_text.dart';
 import 'package:neighborgood/features/home/widgets/post_button.dart';
 import 'package:neighborgood/features/home/widgets/post_text_field.dart';
 import 'package:neighborgood/features/posts/repository/post_repository.dart';
@@ -58,6 +57,7 @@ class _PostCardState extends State<PostCard> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,28 +82,11 @@ class _PostCardState extends State<PostCard> {
                           fontSize: 16,
                         ),
                       ),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '${widget.post.title}...',
-                              style: const TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: const Text(
-                                  'See more',
-                                  style: TextStyle(
-                                    color: Color(0xFF8A8A8A),
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      Text(
+                        widget.post.title,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
                         ),
                       )
                     ],
@@ -118,13 +101,16 @@ class _PostCardState extends State<PostCard> {
             ],
           ),
           const SizedBox(height: 20),
-          CustomText(
-            text: widget.post.description,
-            hashtagColor: const Color(0xFF2D68FE),
-            onSeeMore: () {},
-            maxLength: 22,
+          Text(
+            widget.post.description,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black,
+            ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(
+            height: 15,
+          ),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
