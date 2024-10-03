@@ -3,7 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:neighborgood/features/home/widgets/custom_text.dart';
 import 'package:neighborgood/features/home/widgets/post_button.dart';
 import 'package:neighborgood/features/home/widgets/post_text_field.dart';
+import 'package:neighborgood/features/posts/repository/post_repository.dart';
+import 'package:neighborgood/models/comments.dart';
 import 'package:neighborgood/models/post.dart';
+import 'package:uuid/uuid.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -18,11 +21,28 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   final TextEditingController _commentController = TextEditingController();
+  final PostRepository postRepository = PostRepository();
 
   @override
   void dispose() {
     _commentController.dispose();
     super.dispose();
+  }
+
+  void _addComment() {
+    String id = const Uuid().v1();
+    postRepository.addComment(
+      Comment(
+        id: id,
+        text: _commentController.text.trim(),
+        createdAt: DateTime.now(),
+        postId: widget.post.id,
+        username: widget.post.authorName,
+        profilePic: 'assets/icons/navigation/profile.jpg',
+      ),
+      context,
+    );
+    _commentController.clear();
   }
 
   @override
@@ -118,10 +138,10 @@ class _PostCardState extends State<PostCard> {
           PostButton(post: widget.post),
           const SizedBox(height: 10),
           PostTextField(
-            controller: _commentController,
-            hintText: 'Add a comment...',
-            iconPath: 'assets/icons/navigation/profile.jpg',
-          ),
+              controller: _commentController,
+              hintText: 'Add a comment...',
+              iconPath: 'assets/icons/navigation/profile.jpg',
+              onSubmitted: _addComment),
         ],
       ),
     );

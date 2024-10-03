@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:neighborgood/features/auth/repository/auth_repository.dart';
+import 'package:neighborgood/features/home/widgets/comment_card.dart';
 import 'package:neighborgood/features/posts/repository/post_repository.dart';
 import 'package:neighborgood/models/post.dart';
 import 'package:provider/provider.dart';
@@ -33,14 +34,38 @@ class _PostButtonState extends State<PostButton> {
                 ),
               ),
               const SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.post.comments.length,
-                  itemBuilder: (context, index) {
-                    return Text(widget.post.comments[index].text);
-                  },
-                ),
-              ),
+              StreamBuilder(
+                  stream: context
+                      .read<PostRepository>()
+                      .getCommentsStream(widget.post.id, context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFFF6D00),
+                        ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          snapshot.error.toString(),
+                        ),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final comment = snapshot.data![index];
+                            return CommentCard(comment: comment);
+                          },
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }),
             ],
           ),
         );
@@ -63,7 +88,7 @@ class _PostButtonState extends State<PostButton> {
           children: [
             Row(
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     context.read<PostRepository>().likePost(
                         widget.post, context.read<AuthRepository>().user.uid);
@@ -80,7 +105,7 @@ class _PostButtonState extends State<PostButton> {
                         ),
                 ),
                 const SizedBox(width: 15),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     _showBottomSheet(context);
                   },
@@ -90,16 +115,19 @@ class _PostButtonState extends State<PostButton> {
                   ),
                 ),
                 const SizedBox(width: 15),
-                SvgPicture.asset(
-                  'assets/icons/share.svg',
-                  height: 22,
+                InkWell(
+                  onTap: () {},
+                  child: SvgPicture.asset(
+                    'assets/icons/share.svg',
+                    height: 22,
+                  ),
                 ),
               ],
             )
           ],
         ),
         const SizedBox(width: 15),
-        GestureDetector(
+        InkWell(
           onTap: () {
             context
                 .read<PostRepository>()
