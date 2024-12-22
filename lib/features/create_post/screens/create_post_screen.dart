@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:neighborgood/common/provider/storage_reposiotry.dart';
@@ -26,10 +25,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   File? bannerFile;
-  final PostRepository postRepository = PostRepository();
-  final StorageRepository storageRepository = StorageRepository(
-    firebaseStorage: FirebaseStorage.instance,
-  );
+  
   bool isLoading = false;
 
   @override
@@ -57,7 +53,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       setState(() {
         isLoading = true;
       });
-      final bannerUrl = await storageRepository.storeFile(
+      final bannerUrl = await context.read<StorageRepository>().storeFile(
         path: 'posts/${user!.uid}',
         id: postId,
         file: bannerFile,

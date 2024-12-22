@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
           create: (context) => PostRepository(),
         ),
         Provider(
-          create: (context) =>
-              StorageRepository(firebaseStorage: FirebaseStorage.instance),
+          create: (context) => StorageRepository(
+            firebaseStorage: FirebaseStorage.instance,
+          ),
         ),
       ],
       child: MaterialApp(
